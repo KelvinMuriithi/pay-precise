@@ -6,6 +6,7 @@ use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Models\PayslipItem;
 use App\Models\Payslip;
+use Crypt;
 use Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -60,6 +61,7 @@ class PayrollController extends Controller
         $formattedDate = $request->payslip_date ? \Carbon\Carbon::parse($request->payslip_date)->format('Y-m-d') : null;
 
         $employee = EmployeeDetail::findOrFail($request->employee);
+        dd($employee);
         $salaryInfo = $employee->salaryDetails;
         $deductions = 0;
         $allowances = 0;

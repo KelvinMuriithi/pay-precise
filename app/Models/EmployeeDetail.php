@@ -43,6 +43,10 @@ class EmployeeDetail extends Model
         return $this->hasOne(EmployeeSalaryDetail::class);
     }
 
+    public function payslips(){
+        return $this->hasMany(Payslip::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

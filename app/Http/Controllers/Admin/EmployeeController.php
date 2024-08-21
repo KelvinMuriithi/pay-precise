@@ -98,13 +98,18 @@ class EmployeeController extends Controller
     public function show(string $employee)
     {
         $id = Crypt::decrypt($employee);
+        $employees = User::with('employeeDetail')->get();
         $user = User::findOrFail($id);
         $employee = $user->employeeDetail;
+        $payslip = $employee->payslips()->latest()->first();
+
         $pageTitle = __('Employee Profile');
-        return view('pages.employees.show', compact(
+        return view('admin.view-employee', compact(
+            'employees',
             'employee',
             'user',
-            'pageTitle'
+            'pageTitle',
+            'payslip'
         ));
     }
 

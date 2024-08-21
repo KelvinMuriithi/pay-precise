@@ -165,55 +165,72 @@
                             <td>{{ $employee->address }}</td>
                             <td>{{ $employee->employeeDetail->emp_id ?? '' }}</td>
                             <td>
-                                <!-- Button to trigger the modal -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#salaryModal{{ $employee->id }}">
-                                    Update Salary
-                                </button>
+                                <div class="d-flex justify-content-between">
+                                    <!-- Button to trigger the modal for updating salary -->
+                                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal"
+                                        data-bs-target="#salaryModal{{ $employee->id }}">
+                                        Update Salary
+                                    </button>
+
+                                    <!-- Button to trigger the modal for generating payslip -->
+                                    <form
+                                        action="{{ route('admin.employees.show', ['employee' => \Crypt::encrypt($employee->id)]) }}"
+                                        method="get" style="display: inline;">
+                                        <button type="submit" class="btn btn-primary">
+                                            View Profile
+                                        </button>
+                                    </form>
+
+                                </div>
                             </td>
+
                         </tr>
                         <!-- Modal -->
-            <div class="modal fade" id="salaryModal{{ $employee->id }}" tabindex="-1" aria-labelledby="salaryModalLabel{{ $employee->id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="salaryModalLabel{{ $employee->id }}">Edit Salary Settings for {{ $employee->firstname }} {{ $employee->lastname }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="modal fade" id="salaryModal{{ $employee->id }}" tabindex="-1"
+                            aria-labelledby="salaryModalLabel{{ $employee->id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="salaryModalLabel{{ $employee->id }}">Edit Salary
+                                            Settings for {{ $employee->firstname }} {{ $employee->lastname }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ route('employee.salary-setting', $employee->id) }}" method="post">
+                                            @csrf('PUT')
+                                            <div class="mb-3">
+                                                <label for="salary_basis" class="form-label">Salary Basis</label>
+                                                <select class="form-select" name="basis" id="salary_basis">
+                                                    <option value="">Please select</option>
+                                                    <option value="hourly">Hourly</option>
+                                                    <option value="contract">Contract</option>
+                                                    <option value="monthly">Monthly</option>
+                                                    <option value="weekly">Weekly</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="payment_type" class="form-label">Payment Type</label>
+                                                <select class="form-select" name="payment_method" id="payment_type">
+                                                    <option value="">Please select</option>
+                                                    <option value="cheque">Cheque</option>
+                                                    <option value="banktransfer">Bank Transfer</option>
+                                                    <option value="cash">Cash</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="amount" class="form-label">Salary Amount</label>
+                                                <input type="number" class="form-control" id="amount" name="base_salary"
+                                                    required>
+                                            </div>
+                                            <div class="submit-section">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <form action="{{ route('employee.salary-setting', $employee->id) }}" method="post">
-                                @csrf('PUT')
-                                <div class="mb-3">
-                                    <label for="salary_basis" class="form-label">Salary Basis</label>
-                                    <select class="form-select" name="basis" id="salary_basis">
-                                        <option value="">Please select</option>
-                                        <option value="hourly">Hourly</option>
-                                        <option value="contract">Contract</option>
-                                        <option value="monthly">Monthly</option>
-                                        <option value="weekly">Weekly</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="payment_type" class="form-label">Payment Type</label>
-                                    <select class="form-select" name="payment_method" id="payment_type">
-                                        <option value="">Please select</option>
-                                        <option value="cheque">Cheque</option>
-                                        <option value="banktransfer">Bank Transfer</option>
-                                        <option value="cash">Cash</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="amount" class="form-label">Salary Amount</label>
-                                    <input type="number" class="form-control" id="amount" name="base_salary" required>
-                                </div>
-                                <div class="submit-section">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
                     @endforeach
                 </tbody>
             </table>
